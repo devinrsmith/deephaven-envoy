@@ -100,7 +100,15 @@ static_resources:
                   address:
                     socket_address:
                       address: deephaven-foo
-                      port_value: 10000
+                      port_value: 8443
+      transport_socket:
+        name: envoy.transport_sockets.tls
+        typed_config:
+          "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
+          common_tls_context:
+            validation_context:
+              trusted_ca:
+                filename: /certs/ca.crt
     - name: deephaven-bar
       connect_timeout: 10s
       type: LOGICAL_DNS
@@ -118,8 +126,15 @@ static_resources:
                   address:
                     socket_address:
                       address: deephaven-bar
-                      port_value: 10000
-
+                      port_value: 8443
+      transport_socket:
+        name: envoy.transport_sockets.tls
+        typed_config:
+          "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
+          common_tls_context:
+            validation_context:
+              trusted_ca:
+                filename: /certs/ca.crt
 # admin:
 #   address:
 #     socket_address:
