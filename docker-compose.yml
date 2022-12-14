@@ -1,0 +1,27 @@
+version: '3'
+
+name: deephaven-envoy
+
+services:
+  deephaven-foo:
+    image: ghcr.io/deephaven/server:0.19.1
+    volumes:
+      - ./deephaven.prop:/opt/deephaven/config/deephaven.prop:ro
+
+  deephaven-bar:
+    image: ghcr.io/deephaven/server:0.19.1
+    volumes:
+      - ./deephaven.prop:/opt/deephaven/config/deephaven.prop:ro
+
+  reverse-proxy:
+    image: envoyproxy/envoy:v1.24-latest
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+      # Enable here and in envoy.yaml if admin interface needed
+      # - "9901:9901"
+    volumes:
+      - ./envoy.yaml:/etc/envoy/envoy.yaml:ro
+      - ./certs:/certs:ro

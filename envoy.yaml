@@ -1,0 +1,127 @@
+static_resources:
+  listeners:
+    - name: listener_https
+      address:
+        socket_address:
+          address: 0.0.0.0
+          port_value: 443
+      filter_chains:
+        - filters:
+            - name: envoy.filters.network.http_connection_manager
+              typed_config:
+                "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+                stat_prefix: ingress_https
+                access_log:
+                - name: envoy.access_loggers.stdout
+                  typed_config:
+                    "@type": type.googleapis.com/envoy.extensions.access_loggers.stream.v3.StdoutAccessLog
+                http_filters:
+                  - name: envoy.filters.http.router
+                    typed_config:
+                      "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+                stream_idle_timeout: 0s
+                route_config:
+                  virtual_hosts:
+                    - name: deephaven-foo-localhost
+                      domains: ["deephaven-foo.localhost"]
+                      routes:
+                        - match:
+                            prefix: "/"
+                          route:
+                            cluster: deephaven-foo
+                            max_stream_duration:
+                              grpc_timeout_header_max: 0s
+                            timeout: 0s
+                    - name: deephaven-bar-localhost
+                      domains: ["deephaven-bar.localhost"]
+                      routes:
+                        - match:
+                            prefix: "/"
+                          route:
+                            cluster: deephaven-bar
+                            max_stream_duration:
+                              grpc_timeout_header_max: 0s
+                            timeout: 0s
+          transport_socket:
+            name: envoy.transport_sockets.tls
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.DownstreamTlsContext
+              common_tls_context:
+                tls_certificates:
+                - certificate_chain:
+                    filename: /certs/server.chain.crt
+                  private_key:
+                    filename: /certs/server.key
+
+    # Redirect all requests from port 80 to https
+    - name: listener_http
+      address:
+        socket_address:
+          address: 0.0.0.0
+          port_value: 80
+      filter_chains:
+        - filters:
+            - name: envoy.filters.network.http_connection_manager
+              typed_config:
+                "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+                stat_prefix: ingress_http
+                access_log:
+                - name: envoy.access_loggers.stdout
+                  typed_config:
+                    "@type": type.googleapis.com/envoy.extensions.access_loggers.stream.v3.StdoutAccessLog
+                http_filters:
+                  - name: envoy.filters.http.router
+                    typed_config:
+                      "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+                route_config:
+                  virtual_hosts:
+                    - name: default
+                      domains: ["*"]
+                      routes:
+                        - match:
+                            prefix: "/"
+                          redirect:
+                            https_redirect: true
+  clusters:
+    - name: deephaven-foo
+      connect_timeout: 10s
+      type: LOGICAL_DNS
+      # this will force http2/h2c to the backend
+      typed_extension_protocol_options:
+        envoy.extensions.upstreams.http.v3.HttpProtocolOptions:
+          "@type": type.googleapis.com/envoy.extensions.upstreams.http.v3.HttpProtocolOptions
+          explicit_http_config:
+            http2_protocol_options: {}
+      load_assignment:
+        cluster_name: deephaven-foo
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: deephaven-foo
+                      port_value: 10000
+    - name: deephaven-bar
+      connect_timeout: 10s
+      type: LOGICAL_DNS
+      # this will force http2/h2c to the backend
+      typed_extension_protocol_options:
+        envoy.extensions.upstreams.http.v3.HttpProtocolOptions:
+          "@type": type.googleapis.com/envoy.extensions.upstreams.http.v3.HttpProtocolOptions
+          explicit_http_config:
+            http2_protocol_options: {}
+      load_assignment:
+        cluster_name: deephaven-bar
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: deephaven-bar
+                      port_value: 10000
+
+# admin:
+#   address:
+#     socket_address:
+#       address: 0.0.0.0
+#       port_value: 9901
