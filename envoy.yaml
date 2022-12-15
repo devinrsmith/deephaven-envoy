@@ -47,6 +47,9 @@ static_resources:
             typed_config:
               "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.DownstreamTlsContext
               common_tls_context:
+                # It's important to explicitly set alpn_protocols, otherwise envoy does not expose alpn at all
+                # https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/transport_sockets/tls/v3/tls.proto#extensions-transport-sockets-tls-v3-commontlscontext
+                alpn_protocols: ["h2"]
                 tls_certificates:
                 - certificate_chain:
                     filename: /certs/server.chain.crt
