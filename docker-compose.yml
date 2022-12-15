@@ -24,4 +24,4 @@ services:
       # - "9901:9901"
     volumes:
       - ./envoy.yaml:/etc/envoy/envoy.yaml:ro
-      - ./certs:/certs:ro
+      - ./certs/envoy:/certs:ro

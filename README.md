@@ -10,47 +10,8 @@ Then, connect to [https://deephaven-foo.localhost](https://deephaven-foo.localho
 
 ## Certs
 
-Development certificates have been generated and placed in `certs/`. Do **NOT** use these for production purposes.
-
-### CA
-
-```shell
-openssl genpkey -algorithm RSA -out ca.key
-
-openssl req \
-  -new \
-  -x509 \
-  -nodes \
-  -days 3650 \
-  -subj '/CN=deephaven-localhost-testing-ca' \
-  -key ca.key \
-  -out ca.crt
-```
-
-### Server
-
-```shell
-openssl genpkey -algorithm RSA -out server.key
-
-openssl req \
-  -new \
-  -key server.key \
-  -subj '/CN=localhost' \
-  -out server.csr
-
-openssl x509 \
-  -req \
-  -in server.csr \
-  -CA ca.crt \
-  -CAkey ca.key \
-  -CAcreateserial \
-  -days 3650 \
-  -out server.crt
-
-rm server.csr
-
-cat server.crt ca.crt > server.chain.crt
-```
+Development certificates have been generated and placed in [certs/](./certs/).
+Do **NOT** use these for production purposes.
 
 ## Related
 

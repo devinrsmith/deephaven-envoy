@@ -52,9 +52,9 @@ static_resources:
                 alpn_protocols: ["h2"]
                 tls_certificates:
                 - certificate_chain:
-                    filename: /certs/server.chain.crt
+                    filename: /certs/cert.chain.pem
                   private_key:
-                    filename: /certs/server.key
+                    filename: /certs/key.pem
 
     # Redirect all requests from port 80 to https
     - name: listener_http
