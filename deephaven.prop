@@ -3,6 +3,11 @@ includefiles=dh-defaults.prop
 proxy.hint=true
 
 http.port=8443
+
 ssl.identity.type=privatekey
 ssl.identity.certChainPath=/certs/cert.chain.pem
 ssl.identity.privateKeyPath=/certs/key.pem
+
+ssl.trust.type=certs
+ssl.trust.path=/ca/cert.pem
+ssl.clientAuthentication=NEEDED
