@@ -6,3 +6,7 @@ http.port=8443
 ssl.identity.type=privatekey
 ssl.identity.certChainPath=/certs/deephaven.chain.crt
 ssl.identity.privateKeyPath=/certs/deephaven.key
+
+ssl.trust.type=certs
+ssl.trust.path=/certs/ca.crt
+ssl.clientAuthentication=NEEDED

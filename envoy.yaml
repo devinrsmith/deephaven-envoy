@@ -112,6 +112,11 @@ static_resources:
             validation_context:
               trusted_ca:
                 filename: /certs/ca.crt
+            tls_certificates:
+            - certificate_chain:
+                filename: /certs/server.chain.crt
+              private_key:
+                filename: /certs/server.key
     - name: deephaven-bar
       connect_timeout: 10s
       type: LOGICAL_DNS
@@ -138,6 +143,11 @@ static_resources:
             validation_context:
               trusted_ca:
                 filename: /certs/ca.crt
+            tls_certificates:
+            - certificate_chain:
+                filename: /certs/server.chain.crt
+              private_key:
+                filename: /certs/server.key
 # admin:
 #   address:
 #     socket_address:
