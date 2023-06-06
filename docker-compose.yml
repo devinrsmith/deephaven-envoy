@@ -4,17 +4,17 @@ name: deephaven-envoy
 
 services:
   deephaven-foo:
-    image: ghcr.io/deephaven/server:0.21.0
+    image: ghcr.io/deephaven/server:0.25.0
     volumes:
       - ./deephaven.prop:/opt/deephaven/config/deephaven.prop:ro
 
   deephaven-bar:
-    image: ghcr.io/deephaven/server:0.21.0
+    image: ghcr.io/deephaven/server:0.25.0
     volumes:
       - ./deephaven.prop:/opt/deephaven/config/deephaven.prop:ro
 
   reverse-proxy:
-    image: envoyproxy/envoy:v1.25-latest
+    image: envoyproxy/envoy:v1.26-latest
     restart: unless-stopped
     ports:
       - "80:80"
