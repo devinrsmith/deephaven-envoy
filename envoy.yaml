@@ -112,6 +112,11 @@ static_resources:
             validation_context:
               trusted_ca:
                 filename: /ca/cert.pem
+            tls_certificates:
+            - certificate_chain:
+                filename: /certs/cert.chain.pem
+              private_key:
+                filename: /certs/key.pem
     - name: deephaven-bar
       connect_timeout: 10s
       type: LOGICAL_DNS
@@ -138,6 +143,11 @@ static_resources:
             validation_context:
               trusted_ca:
                 filename: /ca/cert.pem
+            tls_certificates:
+            - certificate_chain:
+                filename: /certs/cert.chain.pem
+              private_key:
+                filename: /certs/key.pem
 # admin:
 #   address:
 #     socket_address:
