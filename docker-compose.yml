@@ -7,11 +7,13 @@ services:
     image: ghcr.io/deephaven/server:0.25.0
     volumes:
       - ./deephaven.prop:/opt/deephaven/config/deephaven.prop:ro
+      - ./certs/deephaven-foo:/certs:ro
 
   deephaven-bar:
     image: ghcr.io/deephaven/server:0.25.0
     volumes:
       - ./deephaven.prop:/opt/deephaven/config/deephaven.prop:ro
+      - ./certs/deephaven-bar:/certs:ro
 
   reverse-proxy:
     image: envoyproxy/envoy:v1.26-latest
@@ -25,3 +27,4 @@ services:
     volumes:
       - ./envoy.yaml:/etc/envoy/envoy.yaml:ro
       - ./certs/envoy:/certs:ro
+      - ./certs/ca/cert.pem:/ca/cert.pem:ro
