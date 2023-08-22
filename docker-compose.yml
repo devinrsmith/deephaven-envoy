@@ -4,12 +4,12 @@ name: deephaven-envoy
 
 services:
   deephaven-foo:
-    image: ghcr.io/deephaven/server:0.26.1
+    image: ghcr.io/deephaven/server:0.27.1
     volumes:
       - ./deephaven.prop:/opt/deephaven/config/deephaven.prop:ro
 
   deephaven-bar:
-    image: ghcr.io/deephaven/server:0.26.1
+    image: ghcr.io/deephaven/server:0.27.1
     volumes:
       - ./deephaven.prop:/opt/deephaven/config/deephaven.prop:ro
 
