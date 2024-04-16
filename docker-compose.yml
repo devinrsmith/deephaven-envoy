@@ -14,7 +14,7 @@ services:
       - ./deephaven.prop:/opt/deephaven/config/deephaven.prop:ro
 
   reverse-proxy:
-    image: envoyproxy/envoy:v1.29-latest
+    image: envoyproxy/envoy:v1.30-latest
     restart: unless-stopped
     ports:
       - "80:80"
